@@ -9,7 +9,7 @@
 (defpackage :facilservil
   (:use :cl)
   (:export :server :ex-server
-           :send :recieve
+           :send :receive
            :dig :bury
            :close-it
            :get-ip
@@ -116,19 +116,19 @@
 
 ;; —————————————————
 
-(defgeneric recieve (target)
-  (:documentation "Recieve a string from a given target."))
+(defgeneric receive (target)
+  (:documentation "receive a string from a given target."))
 
 ;; CONNECTION → STRING
-(defmethod recieve ((con connection))
-  (recieve (con→socket con)))
+(defmethod receive ((con connection))
+  (receive (con→socket con)))
 
 ;; STREAM-USOCKET → STRING
-(defmethod recieve ((socket usocket::stream-usocket))
+(defmethod receive ((socket usocket::stream-usocket))
   (string-sanitize (read-line (usocket:socket-stream socket))))
 
 ;; STREAM-SERVER-USOCKET → NIL
-(defmethod recieve ((socket usocket::stream-server-usocket)) nil)
+(defmethod receive ((socket usocket::stream-server-usocket)) nil)
 
 
 
@@ -153,7 +153,7 @@
 ;; SOCKET → NIL
 (defun process-con-activity (con connection-list on-input)
   "Process client socket that got some activity"
-  (let ((message (recieve con)))
+  (let ((message (receive con)))
     (logger  "~A: ~A" (get-ip con) message)
     (funcall on-input con message connection-list)))
 
