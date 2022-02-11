@@ -203,7 +203,8 @@
 ;; STRING … ARG → NIL
 (defun logger (text &rest args)
   "Simple wrapper around format func to simplify logging."
-  (apply 'format (append (list t (concatenate 'string text "~%")) args)))
+  (apply 'format t text args)
+  (terpri))
 
 
 
